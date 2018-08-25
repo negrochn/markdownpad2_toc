@@ -309,11 +309,11 @@ $headers内容如下：
 
 界面效果如下：
 
-![First Header1](https://github.com/02954/markdownpad2_toc/blob/master/images/firstHeader1.png)
+![First Header1](https://github.com/02954/markdownpad2_toc/blob/master/images/htmlFirstHeader1.png)
 
 如果Markdown文档中没有从`#`开始，直接用了`##`，那么我们试下效果（相当于把文档中的`<h1>一</h1>`删除）
 
-![First Header2](https://github.com/02954/markdownpad2_toc/blob/master/images/firstHeader2.png)
+![First Header2](https://github.com/02954/markdownpad2_toc/blob/master/images/htmlFirstHeader2.png)
 
 效果ok，就是有点小问题，a元素在chrome中呈现下划线效果，建议去掉，所以增加以下代码，把原来的`<h1>一</h1>`加回来，嗯，现在效果完美了
 ```
@@ -323,7 +323,7 @@ $headers内容如下：
     }
 </style>
 ```
-![First Header3](https://github.com/02954/markdownpad2_toc/blob/master/images/firstHeader3.png)
+![First Header3](https://github.com/02954/markdownpad2_toc/blob/master/images/htmlFirstHeader3.png)
 
 
 处理后续hx元素的步骤：
