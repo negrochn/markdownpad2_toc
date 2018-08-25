@@ -1,7 +1,5 @@
 # MarkdownPad2导出HTML支持[TOC]
 
-[TOC]
-
 ## 为什么&效果图
 
 ### 为什么
