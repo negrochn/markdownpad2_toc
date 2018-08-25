@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MarkdownPad2导出HTML支持[TOC]</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <style>
+        .toc a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>一</h1>
+    <p>[TOC]</p>
+    <h2>二</h2>
+    <h3>三</h3>
+    <h2>二</h2>
+
+    <script>
+        $(document).ready(function() {
+            // 新增Contains选择器，:contains的变异版，增加忽略大小写功能
+            $.expr[':'].Contains = function(a, i, m){
+                return jQuery(a).text().toUpperCase().indexOf(m[3].
+                    toUpperCase()) >= 0;
+            };
+
+            // 创建class为toc的div元素
+            let $toc = $('<div></div>');
+            $toc.attr('class', 'toc');
+
+            // 获取h1-h6元素
+            let $headers = $('h1,h2,h3,h4,h5,h6');
+
+            // 获取第一个hx元素，注意是dom对象，非jQuery对象
+            let firstHeader = $headers[0];
+
+            if (firstHeader) {
+                // 获取第一个hx元素的层级
+                let firstLevel = parseInt(firstHeader.tagName.
+                    replace('H', ''), 10);
+                // 给a元素唯一的href属性值
+                let id = `${firstHeader.textContent}-0`;
+
+                for (let i = 1; i <= firstLevel; i++) {
+                    // 创建ul和li元素，并添加data-level属性
+                    let $ul = $('<ul></ul>'),
+                        $li = $('<li></li>');
+                    $li.attr('data-level', i);
+                    $ul.attr('data-level', i).append($li);
+
+                    // 获取data-level为i-1的li元素
+                    let $pLi = $toc.find(`li[data-level=${i - 1}]`);
+
+                    if ($pLi.length > 0) {
+                        // 找到data-level为i-1的元素，直接append到该li元素上即可
+                        $pLi.append($ul);
+                    } else {
+                        // 未找到data-level为i-1的元素，说明是顶层的ul，
+                        // 直接append到class为toc的div元素上
+                        $toc.append($ul);
+                    }
+                }
+
+                // 找到所属层级的li元素，并添加a元素
+                $toc.find(`li[data-level=${firstLevel}]`).append(
+                    $(`<a href="#${id}">${firstHeader.textContent}</a>`));
+                // 与a元素的href对应，用于文档内跳转
+                $headers.eq(0).attr('id', id);
+            }
+
+            // 从第二个hx元素开始，循环$headers
+            for (let i = 1; i < $headers.length; i++) {
+                // 获取当前的hx元素的层级以及上一个hx元素的层级
+                let curLevel = parseInt($headers[i].tagName.replace('H', ''),
+                    10),
+                    lastLevel = parseInt($headers[i - 1].tagName.
+                        replace('H', ''), 10);
+                // 当前hx元素的文本元素
+                let textContent = $headers[i].textContent,
+                    id = `${textContent}-i`;
+                // 给a元素唯一的href属性值，与hx元素的id对应
+                let $a = $(`<a href="#${id}">${textContent}</a>`);
+
+                if (lastLevel < curLevel) {
+                    // 如果当前层级比上一个层级大，则从上一个层级+1到当前层级循环，
+                    // 循环添加ul和li元素
+                    for (let j = lastLevel + 1; j <= curLevel; j++) {
+                        // 创建ul和li元素，并添加data-level属性
+                        let $u = $('<ul></ul>'),
+                            $l = $('<li></li>');
+                        $l.attr('data-level', j);
+                        $u.attr('data-level', j).append($l);
+
+                        // 找到data-level为j-1的最后一个li元素，并添加$u
+                        $toc.find(`li[data-level=${j - 1}]:last`).append($u);
+                    }
+                    // 找到data-level为curLevel的最后一个li，并添加$a
+                    $toc.find(`li[data-level=${curLevel}]:last`).append($a);
+                } else if (lastLevel === curLevel) {
+                    // 如果当前层级和上一个层级相等，则找到相同层级的li元素的父元素，
+                    // 创建li元素并添加上去
+                    // 已经存在data-level为curLevel的ul，只需要创建li即可
+                    let $l = $('<li></li>');
+
+                    // 给li元素添加data-level树形，并添加$a
+                    // 找到data-level为curLevel的最后一个li元素的父元素，添加$l
+                    $toc.find(`li[data-level=${curLevel}]:last`).parent().
+                        append($l.attr('data-level', curLevel).append($a));
+                } else {
+                    // 如果当前层级小于上一个层级，则找到最后一个相同层级的li元素的
+                    // 父元素，添加$l
+                    // 找到data-level为curLevel的最后一个li元素,必然存在
+                    let $sublingLi = $toc.
+                        find(`li[data-level=${curLevel}]:last`);
+                    let $l = $('<li></li>');
+
+                    // 找到$sublingLi的父元素,添加li元素即可
+                    $sublingLi.parent().append($l.attr('data-level', curLevel).
+                        append($a));
+                }
+
+                $headers.eq(i).attr('id', id);
+            }
+
+            // 清除p元素的文本内容，并将$toc元素append到p元素
+            $('p:Contains([TOC]):first').text('').append($toc);
+        });
+    </script>
+</body>
+</html>
