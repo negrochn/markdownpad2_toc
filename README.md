@@ -1,5 +1,7 @@
 # MarkdownPad2导出HTML支持[TOC]
 
+请点击[MarkdownPad2_toc](https://codepen.io/02954/pen/qMRbMo)查看效果。
+
 ## 为什么&效果图
 
 ### 为什么
