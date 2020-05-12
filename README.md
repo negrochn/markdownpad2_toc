@@ -57,7 +57,7 @@
 ![HTML Dom](https://github.com/02954/markdownpad2_toc/blob/master/images/htmlDom.png)
 
 那么，我们要将`<p>[TOC]</p>`，转换成什么样子呢？
-```
+```html
 <p>
     <div class="toc">
         <ul data-level="1">
@@ -88,13 +88,13 @@
 那么我们先把上面的`<html>`理解一下吧
 
 首先，将`p`元素的`[TOC]`替换为`div`元素，且该`div`元素有一个叫`toc`的class
-```
+```html
 <p>
     <div class="toc"></div>
 </p>
 ```
 接着，要实现层次效果，我们需要用到`ul`、`li`元素，搭建一级标题吧
-```
+```html
 <p>
     <div class="toc">
         <ul data-level="1">
@@ -110,7 +110,7 @@
 ![data-level=1](https://github.com/02954/markdownpad2_toc/blob/master/images/data-level=1.png)
 
 继续搭，不准停...
-```
+```html
 <p>
     <div class="toc">
         <ul data-level="1">
@@ -131,7 +131,7 @@
 ![data-level=2](https://github.com/02954/markdownpad2_toc/blob/master/images/data-level=2.png)
 
 那如果有两个标题二呢？再加个`li`呗
-```
+```html
 <p>
     <div class="toc">
         <ul data-level="1">
@@ -155,7 +155,7 @@
 ![data-level=2_2](https://github.com/02954/markdownpad2_toc/blob/master/images/data-level=2_2.png)
 
 如果又要在第一个标题二下加一个标题三呢？
-```
+```html
 <p>
     <div class="toc">
         <ul data-level="1">
@@ -191,7 +191,7 @@
 
 #### 初始HTML
 
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -218,7 +218,7 @@
 1. 创建class为toc的div元素
 2. 找到p元素，怎么找通过`[TOC]`来找p元素
 3. 将p元素的文本元素清空，并将步骤1中的div元素append到该p元素上
-```
+```html
 <script>
     $(document).ready(function() {
         // 创建class为toc的div元素
@@ -233,7 +233,7 @@
 如果Markdown文档中有多个[TOC]语法，我们只取第一个，其余的不做转换，谁没事搞这么多个[TOC]呢，是不？当然有人站出来说，一定要有多个[TOC]，行行行，那你把`:first`出去就行了。
 
 另外，这个代码还有点小缺陷，如果有些人习惯用[toc]呢？发现`<p>[toc]</p>`并没有变化，所以需要整改一下
-```
+```html
 <script>
     $(document).ready(function() {
         // 新增Contains选择器，:contains的变异版，增加忽略大小写功能
@@ -264,7 +264,7 @@
 3. 对firstLevel循环处理，创建ul、li元素并按层级append
 4. ul、li元素append完成后，找到firstLevel对应的li元素，并append一个a元素用于显示标题内容
 
-```
+```js
 // 获取h1-h6元素
 let $headers = $('h1,h2,h3,h4,h5,h6');
 
@@ -318,7 +318,7 @@ $headers内容如下：
 ![First Header2](https://github.com/02954/markdownpad2_toc/blob/master/images/htmlFirstHeader2.png)
 
 效果ok，就是有点小问题，a元素在chrome中呈现下划线效果，建议去掉，所以增加以下代码，把原来的`<h1>一</h1>`加回来，嗯，现在效果完美了
-```
+```html
 <style>
     .toc a {
         text-decoration: none;
@@ -336,7 +336,7 @@ $headers内容如下：
 5. 如果当前层级小于上一个层级，则找到最后一个相同层级的li元素的父元素，添加$l
 6. 设置hx元素的id，与a的href保持一致
 
-```
+```js
 // 从第二个hx元素开始，循环$headers
 for (let i = 1; i < $headers.length; i++) {
     // 获取当前的hx元素的层级以及上一个hx元素的层级
@@ -393,7 +393,7 @@ for (let i = 1; i < $headers.length; i++) {
 ```
 
 全部代码如下：
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
