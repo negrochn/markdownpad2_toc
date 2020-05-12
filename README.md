@@ -534,7 +534,7 @@ for (let i = 1; i < $headers.length; i++) {
 ### MarkdownPad2效果
 
 以上代码编写完毕，但只是一个demo，我们的目的是为了让MarkdownPad2导出HTML时支持[TOC]，所以，先删除不必要的代码
-```
+```html
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
 <script>
     $(document).ready(function() {
